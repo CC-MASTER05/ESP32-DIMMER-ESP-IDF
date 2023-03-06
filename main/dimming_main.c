@@ -407,11 +407,11 @@ void app_main(void) {
         };
         ESP_ERROR_CHECK( ledc_channel_config(&led_config) );
         
-        LEDC.channel_group[0].channel[3].duty.duty = TRIAC_GATE_IMPULSE_CYCLES << 4;
+        LEDC.channel_group[0].channel[i].duty.duty = TRIAC_GATE_IMPULSE_CYCLES << 4;
         // Initial brightness of 0, meaning turn TRIAC on at very end:
-        LEDC.channel_group[0].channel[3].hpoint.hpoint = (1 << DUTY_BIT_DEPTH) - 1;
-        LEDC.channel_group[0].channel[3].conf0.sig_out_en = 1;
-        LEDC.channel_group[0].channel[3].conf1.duty_start = 1;
+        LEDC.channel_group[0].channel[i].hpoint.hpoint = (1 << DUTY_BIT_DEPTH) - 1;
+        LEDC.channel_group[0].channel[i].conf0.sig_out_en = 1;
+        LEDC.channel_group[0].channel[i].conf1.duty_start = 1;
     }
     
     ESP_LOGI(LOG_STARTUP, "Configured channels.\n");
@@ -420,7 +420,7 @@ void app_main(void) {
     ESP_LOGI(LOG_STARTUP, "Enabled zero crossing interrupt.\n");
 
     for (uint16_t i = 0; i < NUM_CHANNELS; ++i) {
-        set_channel_fade(3, TESTING_FADE_DURATION_MSECS, (1 << DUTY_BIT_DEPTH) - 1);
+        set_channel_fade(i, TESTING_FADE_DURATION_MSECS, (1 << DUTY_BIT_DEPTH) - 1);
         vTaskDelay( TESTING_FADE_DURATION_MSECS / NUM_CHANNELS / TICK_PERIOD_MS);
     }
 
